@@ -10,6 +10,8 @@ export const signUp = async (req, res) => {
     const newUser = new User({ name, email, password, token: genId() });
     await newUser.save();
 
+    // Send confirmation email
+
     res.status(201).json({
       ok: true,
       msg: 'User successfully created, check your email.',
@@ -99,4 +101,9 @@ export const genNewPassword = async (req, res) => {
     console.log(error);
     res.status(500).json({ ok: false, msg: 'Something went wrong!' });
   }
+};
+
+export const isAuthenticated = (req, res) => {
+  const { authenticatedUser } = req;
+  res.status(200).json({ ok: true, user: authenticatedUser });
 };
