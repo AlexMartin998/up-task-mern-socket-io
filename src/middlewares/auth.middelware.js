@@ -23,7 +23,7 @@ export const checkLoginCredentials = async (req, res, next) => {
   return next();
 };
 
-export const checkIdToken = async (req, res, next) => {
+export const checkToken = async (req, res, next) => {
   const { token } = req.params;
 
   const unconfirmedUser = await User.findOne({ token });

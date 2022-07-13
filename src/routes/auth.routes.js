@@ -5,13 +5,19 @@ import { check } from 'express-validator';
 
 import {
   checkLoginCredentials,
-  checkIdToken,
+  checkToken,
   emailPassRules,
   signUpValidationRules,
   validate,
 } from '../middlewares';
 import { isAlreadyRegistered } from '../helpers';
-import { confirmUser, signIn, signUp } from '../controllers';
+import {
+  confirmUser,
+  generateRecoveryToken,
+  signIn,
+  signUp,
+  validateToken,
+} from '../controllers';
 
 const router = Router();
 
@@ -28,6 +34,15 @@ router
   .route('/login')
   .post(emailPassRules(), validate, checkLoginCredentials, signIn);
 
-router.route('/confirm/:token').get(checkIdToken, confirmUser);
+router.route('/confirm/:token').get(checkToken, confirmUser);
+
+router.route('/token-recovery').post(
+  check('email', 'Invalid email!').isEmail(),
+  validate,
+
+  generateRecoveryToken
+);
+
+router.route('/password-recovery/:token').get(checkToken, validateToken);
 
 export default router;

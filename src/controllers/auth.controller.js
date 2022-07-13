@@ -64,3 +64,22 @@ export const signIn = async (req, res) => {
     res.status(500).json({ ok: false, msg: 'Something went wrong!' });
   }
 };
+
+export const generateRecoveryToken = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user)
+    return res.status(401).json({ ok: false, msg: "User doesn't exist!" });
+
+  user.token = genId();
+  await user.save();
+
+  // Send email with token/instructions
+
+  res
+    .status(200)
+    .json({ ok: true, msg: 'An e-mail with instructions has been sent.' });
+};
+
+export const validateToken = async (_req, res) =>
+  res.status(200).json({ ok: true, msg: 'Successful validation!' });
