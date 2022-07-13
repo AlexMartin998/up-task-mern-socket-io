@@ -2,9 +2,8 @@
 
 import { User } from '../models';
 
-export const isAlreadyRegistered = async (query, collection, req) => {
+export const isAlreadyRegistered = async (query, collection) => {
   let model;
-  // const { email } = req.body;
 
   const checkInCollection = () => {
     if (model)

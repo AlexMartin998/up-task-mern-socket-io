@@ -1,6 +1,7 @@
 'use strict';
 
 import { Schema, model } from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const UserSchema = new Schema(
   {
@@ -35,5 +36,25 @@ const UserSchema = new Schema(
     timestamps: true,
   }
 );
+
+UserSchema.pre('save', async function (next) {
+  // Si el pass ya esta hasheado NO lo vuelve a hashear
+  if (!this.isModified('password')) return next();
+
+  const hash = await bcrypt.hash(this.password, 10);
+  this.password = hash;
+
+  next();
+});
+
+UserSchema.methods.toJSON = function () {
+  const user = this.toObject();
+  user.uid = user._id;
+
+  delete user.password;
+  delete user._id;
+
+  return user;
+};
 
 export default model('User', UserSchema);
