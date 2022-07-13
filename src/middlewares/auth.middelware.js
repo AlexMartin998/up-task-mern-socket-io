@@ -22,3 +22,13 @@ export const checkLoginCredentials = async (req, res, next) => {
 
   return next();
 };
+
+export const checkIdToken = async (req, res, next) => {
+  const { token } = req.params;
+
+  const unconfirmedUser = await User.findOne({ token });
+  if (!unconfirmedUser)
+    return res.status(401).json({ ok: false, msg: 'Invalid token!' });
+
+  return next();
+};

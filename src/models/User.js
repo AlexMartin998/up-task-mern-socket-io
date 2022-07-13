@@ -38,7 +38,7 @@ const UserSchema = new Schema(
 );
 
 UserSchema.pre('save', async function (next) {
-  // Si el pass ya esta hasheado NO lo vuelve a hashear
+  // If the pass is already hashed, it don't re-hashed it.
   if (!this.isModified('password')) return next();
 
   const hash = await bcrypt.hash(this.password, 10);

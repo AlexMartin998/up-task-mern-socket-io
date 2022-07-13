@@ -22,6 +22,25 @@ export const signUp = async (req, res) => {
   }
 };
 
+export const confirmUser = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const unconfirmedUser = await User.findOne({ token });
+
+    unconfirmedUser.token = null;
+    unconfirmedUser.confirmed = true;
+    await unconfirmedUser.save();
+
+    res.status(200).json({
+      ok: true,
+      msg: 'Successful confirmation!',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ ok: false, msg: 'Something went wrong!' });
+  }
+};
+
 export const signIn = async (req, res) => {
   try {
     const { email } = req.body;
@@ -41,6 +60,7 @@ export const signIn = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ ok: false, msg: 'Something went wrong!' });
   }
 };
