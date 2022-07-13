@@ -5,22 +5,12 @@ import { check } from 'express-validator';
 
 import {
   checkLoginCredentials,
-  checkToken,
   emailPassRules,
-  protectWithJwt,
   signUpValidationRules,
   validate,
 } from '../middlewares';
 import { isAlreadyRegistered } from '../helpers';
-import {
-  confirmUser,
-  generateRecoveryToken,
-  genNewPassword,
-  isAuthenticated,
-  signIn,
-  signUp,
-  validateToken,
-} from '../controllers';
+import { signIn, signUp } from '../controllers';
 
 const router = Router();
 
@@ -38,29 +28,5 @@ router.route('/signup').post(
 router
   .route('/login')
   .post(emailPassRules(), validate, checkLoginCredentials, signIn);
-
-router.route('/confirm/:token').get(checkToken, confirmUser);
-
-router.route('/token-recovery').post(
-  [check('email', 'Invalid email!').isEmail(), validate],
-
-  generateRecoveryToken
-);
-
-router
-  .route('/password-recovery/:token')
-  .get(checkToken, validateToken)
-  .post(
-    [
-      check('password', 'Password is required!').notEmpty(),
-      validate,
-      checkToken,
-    ],
-
-    genNewPassword
-  );
-
-// Private
-router.route('/profile').get(protectWithJwt, isAuthenticated);
 
 export default router;

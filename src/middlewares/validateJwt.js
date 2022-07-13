@@ -6,17 +6,17 @@ import { SECRETORKEY_JWT } from './../config';
 import { User } from './../models';
 
 export const protectWithJwt = async (req, res, next) => {
-  const token = req.header('Authorization');
-  if (!token || !token.startsWith('Bearer'))
-    return res
-      .status(401)
-      .json({ ok: false, msg: "You haven't sent a valid token" });
+  const bearerToken = req.header('Authorization');
+  if (!bearerToken || !bearerToken.startsWith('Bearer'))
+    return res.status(401).json({ ok: false, msg: 'Invalid token!' });
 
-  const tokenWithoutBearer = token.split(' ')[1];
+  const tokenJwt = bearerToken.split(' ')[1];
 
   try {
-    const { id } = jwt.verify(tokenWithoutBearer, SECRETORKEY_JWT);
-    const user = await User.findById(id).select('-password -token -confirmed');
+    const { id } = jwt.verify(tokenJwt, SECRETORKEY_JWT);
+    const user = await User.findById(id).select(
+      '-password -token -confirmed -createdAt -updatedAt'
+    );
 
     if (!user)
       return res
