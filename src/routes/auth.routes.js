@@ -14,6 +14,7 @@ import { isAlreadyRegistered } from '../helpers';
 import {
   confirmUser,
   generateRecoveryToken,
+  genNewPassword,
   signIn,
   signUp,
   validateToken,
@@ -43,6 +44,14 @@ router.route('/token-recovery').post(
   generateRecoveryToken
 );
 
-router.route('/password-recovery/:token').get(checkToken, validateToken);
+router.route('/password-recovery/:token')
+  .get(checkToken, validateToken)
+  .post(
+    check('password', 'Password is required!').notEmpty(),
+    validate,
+    checkToken,
+
+    genNewPassword
+  );
 
 export default router;

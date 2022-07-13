@@ -83,3 +83,20 @@ export const generateRecoveryToken = async (req, res) => {
 
 export const validateToken = async (_req, res) =>
   res.status(200).json({ ok: true, msg: 'Successful validation!' });
+
+export const genNewPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const user = await User.findOne({ token });
+    user.token = null;
+    user.password = password;
+    await user.save();
+
+    res.status(201).json({ ok: true, msg: 'Password updated successfully!' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ ok: false, msg: 'Something went wrong!' });
+  }
+};
