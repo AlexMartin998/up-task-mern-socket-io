@@ -1,3 +1,3 @@
 'use strict';
 
-export * from './validateInputs.middleware';
+export * from './validator.middelware';
