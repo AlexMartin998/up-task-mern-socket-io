@@ -3,9 +3,14 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
 
-import { signUpValidationRules, validate } from '../middlewares';
+import {
+  checkLoginCredentials,
+  emailPassRules,
+  signUpValidationRules,
+  validate,
+} from '../middlewares';
 import { isAlreadyRegistered } from '../helpers';
-import { signUp } from '../controllers';
+import { signIn, signUp } from '../controllers';
 
 const router = Router();
 
@@ -17,5 +22,9 @@ router.route('/signup').post(
 
   signUp
 );
+
+router
+  .route('/login')
+  .post(emailPassRules(), validate, checkLoginCredentials, signIn);
 
 export default router;

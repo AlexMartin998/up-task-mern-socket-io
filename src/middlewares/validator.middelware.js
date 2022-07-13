@@ -2,7 +2,7 @@
 
 import { body, validationResult } from 'express-validator';
 
-const emailPassRules = () => [
+export const emailPassRules = () => [
   body('email', 'Invalid email!').isEmail(),
   body('password', 'Password must be longer than 6 characters!').isLength({
     min: 6,
