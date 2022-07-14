@@ -13,6 +13,8 @@ import {
   removeCollaborator,
   updateProject,
 } from '../controllers';
+import { check } from 'express-validator';
+import { idExistInDB } from '../helpers';
 
 const router = Router();
 
@@ -24,7 +26,20 @@ router
   .post([createProjectRules(), validate], createProject)
   .get(getProjects);
 
-router.route('/:id').get(getProject).put(updateProject).delete(deleteProject);
+router
+  .route('/:id')
+  .get(
+    [
+      check('id', 'Invalid ID!').isMongoId(),
+      validate,
+      check('id').custom((id, { req }) => idExistInDB(id, 'project', req)),
+      validate,
+    ],
+
+    getProject
+  )
+  .put(updateProject)
+  .delete(deleteProject);
 
 router.route('/task/:id').get(getTask);
 

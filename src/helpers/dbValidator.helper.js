@@ -1,6 +1,6 @@
 'use strict';
 
-import { User } from '../models';
+import { Project, User } from '../models';
 
 export const isAlreadyRegistered = async (query, collection) => {
   let model;
@@ -18,6 +18,31 @@ export const isAlreadyRegistered = async (query, collection) => {
     case 'user':
       model = await User.findOne({ email: query });
       return checkInCollection();
+
+    default:
+      throw new Error('Something went wrong!');
+  }
+};
+
+const isSameUer = (model, authenticatedUser) => {
+  if (model.owner._id.toString() !== authenticatedUser._id.toString())
+    throw new Error('Unauthorized!');
+};
+
+export const idExistInDB = async (id, collection, req) => {
+  let model;
+  const { authenticatedUser } = req;
+
+  const checkInCollection = () => {
+    if (!model)
+      throw new Error(`${collection} ID: '${id} doesn't exist in DB!`);
+  };
+
+  switch (collection) {
+    case 'project':
+      model = await Project.findById(id);
+      checkInCollection();
+      return isSameUer(model, authenticatedUser);
 
     default:
       throw new Error('Something went wrong!');

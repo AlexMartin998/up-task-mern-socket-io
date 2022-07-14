@@ -41,7 +41,10 @@ export const getProjects = async (req, res) => {
 };
 
 export const getProject = async (req, res) => {
-  //
+  const { id } = req.params;
+
+  const project = await Project.findById(id).populate('owner', 'name');
+  res.status(200).json({ ok: true, project });
 };
 
 export const updateProject = async (req, res) => {
