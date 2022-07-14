@@ -48,8 +48,48 @@ export const getProject = async (req, res) => {
 };
 
 export const updateProject = async (req, res) => {
-  //
+  const { id } = req.params;
+  const { name, client, description, deliveryDate } = req.body;
+
+  try {
+    const project = await Project.findByIdAndUpdate(
+      id,
+      { name, client, description, deliveryDate },
+      { new: true }
+    );
+
+    res
+      .status(200)
+      .json({ ok: true, msg: 'Project updated succssesfully!', project });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ ok: false, msg: 'Something went wrong!' });
+  }
 };
+
+/* Other way:
+export const updateProject = async (req, res) => {
+  const { id } = req.params;
+  const { name, client, description, deliveryDate } = req.body;
+
+  try {
+    const project = await Project.findById(id);
+    project.name = name || project.name;
+    project.description = description || project.description;
+    project.client = client || project.client;
+    project.deliveryDate = deliveryDate || project.deliveryDate;
+
+    await project.save();
+
+    res
+      .status(200)
+      .json({ ok: true, msg: 'Project updated succssesfully!', project });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ ok: false, msg: 'Something went wrong!' });
+  }
+};
+ */
 
 export const deleteProject = async (req, res) => {
   //
