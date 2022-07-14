@@ -24,7 +24,20 @@ export const createProject = async (req, res) => {
 };
 
 export const getProjects = async (req, res) => {
-  //
+  const { authenticatedUser } = req;
+  const ownProjects = { owner: authenticatedUser._id };
+
+  try {
+    const [projects, total] = await Promise.all([
+      Project.find(ownProjects),
+      Project.countDocuments(ownProjects),
+    ]);
+
+    res.status(200).json({ ok: true, total, projects });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ ok: false, msg: 'Something went wrong!' });
+  }
 };
 
 export const getProject = async (req, res) => {
