@@ -2,6 +2,7 @@
 
 import { body, validationResult } from 'express-validator';
 
+// Auth
 export const emailPassRules = () => [
   body('email', 'Invalid email!').isEmail(),
   body('password', 'Password must be longer than 6 characters!').isLength({
@@ -12,6 +13,14 @@ export const emailPassRules = () => [
 export const signUpValidationRules = () => [
   body('name', 'Invalid name!').notEmpty(),
   ...emailPassRules(),
+];
+
+// Projects
+export const createProjectRules = () => [
+  body('name', 'Invalid name!').notEmpty(),
+  body('description', 'Invalid description!').notEmpty(),
+  body('client', 'Invalid client!').notEmpty(),
+  // body('owner', 'Invalid owner!').isMongoId(),
 ];
 
 export const validate = (req, res, next) => {

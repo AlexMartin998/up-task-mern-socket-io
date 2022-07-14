@@ -2,8 +2,8 @@
 
 import jwt from 'jsonwebtoken';
 
-import { SECRETORKEY_JWT } from './../config';
-import { User } from './../models';
+import { SECRETORKEY_JWT } from '../config';
+import { User } from '../models';
 
 export const protectWithJwt = async (req, res, next) => {
   const bearerToken = req.header('Authorization');
