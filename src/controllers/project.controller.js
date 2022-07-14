@@ -14,7 +14,7 @@ export const createProject = async (req, res) => {
 
     res.status(201).json({
       ok: true,
-      msg: 'Project created successfully!',
+      msg: 'Project successfully created!',
       project: newProject,
     });
   } catch (error) {
@@ -60,7 +60,7 @@ export const updateProject = async (req, res) => {
 
     res
       .status(200)
-      .json({ ok: true, msg: 'Project updated succssesfully!', project });
+      .json({ ok: true, msg: 'Project succssesfully updated!', project });
   } catch (error) {
     console.log(error);
     res.status(500).json({ ok: false, msg: 'Something went wrong!' });
@@ -92,7 +92,15 @@ export const updateProject = async (req, res) => {
  */
 
 export const deleteProject = async (req, res) => {
-  //
+  const { id } = req.params;
+  try {
+    await Project.findByIdAndDelete(id);
+
+    res.status(200).json({ ok: true, msg: 'Project successfully deleted!' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ ok: false, msg: 'Something went wrong!' });
+  }
 };
 
 export const addCollaborator = async (req, res) => {

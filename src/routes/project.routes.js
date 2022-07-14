@@ -48,7 +48,16 @@ router
 
     updateProject
   )
-  .delete(deleteProject);
+  .delete(
+    [
+      check('id', 'Invalid ID!').isMongoId(),
+      validate,
+      check('id').custom((id, { req }) => idExistInDB(id, 'project', req)),
+      validate,
+    ],
+
+    deleteProject
+  );
 
 router.route('/task/:id').get(getTask);
 
