@@ -1,6 +1,6 @@
 'use strict';
 
-import { Project } from '../models';
+import { Project, Task } from '../models';
 
 export const createProject = async (req, res) => {
   const { name, description, client } = req.body;
@@ -44,7 +44,21 @@ export const getProject = async (req, res) => {
   const { id } = req.params;
 
   const project = await Project.findById(id).populate('owner', 'name');
-  res.status(200).json({ ok: true, project });
+
+  // Get its tasks
+  const itsTasks = { project: project._id };
+  const [tasks, total] = await Promise.all([
+    Task.find(itsTasks),
+    Task.countDocuments(itsTasks),
+  ]);
+
+  res.status(200).json({
+    ok: true,
+    project: {
+      project,
+      tasks: { total, tasks },
+    },
+  });
 };
 
 export const updateProject = async (req, res) => {
