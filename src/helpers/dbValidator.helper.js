@@ -1,6 +1,6 @@
 'use strict';
 
-import { Project, User } from '../models';
+import { Project, Task, User } from '../models';
 
 export const isAlreadyRegistered = async (query, collection) => {
   let model;
@@ -43,6 +43,17 @@ export const idExistInDB = async (id, collection, req) => {
       model = await Project.findById(id);
       checkInCollection();
       return isSameUer(model, authenticatedUser);
+
+    case 'task':
+      model = await Task.findById(id).populate('project');
+      checkInCollection();
+
+      if (
+        model.project.owner._id.toString() !== authenticatedUser._id.toString()
+      )
+        throw new Error('Unauthorized!');
+
+      return;
 
     default:
       throw new Error('Something went wrong!');
