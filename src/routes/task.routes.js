@@ -4,8 +4,8 @@ import { Router } from 'express';
 import { check } from 'express-validator';
 
 import { createTaskRules, protectWithJwt, validate } from '../middlewares';
-import { idExistInDB } from '../helpers';
-import { createTask, getTask } from '../controllers';
+import { idExistInDB, isValidPriority } from '../helpers';
+import { createTask, getTask, updateTask } from '../controllers';
 
 const router = Router();
 
@@ -22,15 +22,27 @@ router.route('/').post(
   createTask
 );
 
-router.route('/:id').get(
-  [
-    check('id', 'Invalid ID!').isMongoId(),
-    validate,
-    check('id').custom((id, { req }) => idExistInDB(id, 'task', req)),
-    validate,
-  ],
+router
+  .route('/:id')
+  .get(
+    [
+      check('id', 'Invalid ID!').isMongoId(),
+      validate,
+      check('id').custom((id, { req }) => idExistInDB(id, 'task', req)),
+      validate,
+    ],
 
-  getTask
-);
+    getTask
+  )
+  .put(
+    [
+      check('id', 'Invalid ID!').isMongoId(),
+      check('priority').custom(isValidPriority),
+      check('id').custom((id, { req }) => idExistInDB(id, 'task', req)),
+      validate,
+    ],
+
+    updateTask
+  );
 
 export default router;
