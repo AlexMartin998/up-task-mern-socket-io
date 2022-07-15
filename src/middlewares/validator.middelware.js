@@ -1,6 +1,7 @@
 'use strict';
 
 import { body, validationResult } from 'express-validator';
+import { isValidPriority } from '../helpers';
 
 // Auth
 export const emailPassRules = () => [
@@ -21,6 +22,14 @@ export const createProjectRules = () => [
   body('description', 'Invalid description!').notEmpty(),
   body('client', 'Invalid client!').notEmpty(),
   // body('owner', 'Invalid owner!').isMongoId(),
+];
+
+// Tasks:
+export const createTaskRules = () => [
+  body('name', 'Invalid name!').notEmpty(),
+  body('description', 'Invalid description!').notEmpty(),
+  body('project', 'Invalid project!').isMongoId(),
+  body('priority').custom(isValidPriority),
 ];
 
 export const validate = (req, res, next) => {

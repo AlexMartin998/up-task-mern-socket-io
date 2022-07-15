@@ -48,3 +48,10 @@ export const idExistInDB = async (id, collection, req) => {
       throw new Error('Something went wrong!');
   }
 };
+
+export const isValidPriority = priority => {
+  if (!['baja', 'media', 'alta'].includes(priority.toLowerCase()))
+    throw new Error(`Invalid priority! - ${priority}`);
+
+  return true;
+};
