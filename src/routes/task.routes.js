@@ -5,7 +5,7 @@ import { check } from 'express-validator';
 
 import { createTaskRules, protectWithJwt, validate } from '../middlewares';
 import { idExistInDB, isValidPriority } from '../helpers';
-import { createTask, getTask, updateTask } from '../controllers';
+import { createTask, deleteTask, getTask, updateTask } from '../controllers';
 
 const router = Router();
 
@@ -43,6 +43,16 @@ router
     ],
 
     updateTask
+  )
+  .delete(
+    [
+      check('id', 'Invalid ID!').isMongoId(),
+      validate,
+      check('id').custom((id, { req }) => idExistInDB(id, 'task', req)),
+      validate,
+    ],
+
+    deleteTask
   );
 
 export default router;
