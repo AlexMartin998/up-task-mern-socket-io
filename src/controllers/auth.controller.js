@@ -1,7 +1,7 @@
 'use strict';
 
-import { genId, genJWT } from '../helpers';
 import { User } from './../models';
+import { emailRegister, genId, genJWT } from '../helpers';
 
 export const signUp = async (req, res) => {
   try {
@@ -11,11 +11,11 @@ export const signUp = async (req, res) => {
     await newUser.save();
 
     // Send confirmation email
+    await emailRegister({ name, email, token: newUser.token });
 
     res.status(201).json({
       ok: true,
       msg: 'User successfully created, check your email.',
-      user: newUser,
     });
   } catch (error) {
     console.log(error);
@@ -23,7 +23,6 @@ export const signUp = async (req, res) => {
     res.status(500).json({ ok: false, msg: 'Something went wrong!' });
   }
 };
-
 
 export const signIn = async (req, res) => {
   try {

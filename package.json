@@ -9,11 +9,9 @@
     "start": "node ./dist/server.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --verbose --detectOpenHandles --silent ./tests/*.spec.js",
     "test-watch": "npm run test -- --watch",
-
     "test-mocha": "mocha --require @babel/register ./tests/*.test.js",
     "build-mocha": "rimraf ./dist && babel ./src -d ./dist/src && babel ./tests -d ./dist/tests",
     "test-mocha-manual": "npm run build-mocha && mocha ./dist/tests/*.test.js",
-
     "basic-setup": "yarn add express cors dotenv express-validator bcryptjs mongoose jsonwebtoken helmet memory-cache morgan compression && yarn add -D @babel/cli @babel/core @babel/node @babel/plugin-transform-runtime @babel/preset-env eslint ncp nodemon rimraf"
   },
   "keywords": [],
@@ -30,7 +28,8 @@
     "jsonwebtoken": "^8.5.1",
     "memory-cache": "^0.2.0",
     "mongoose": "^6.4.4",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.7.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.6",
