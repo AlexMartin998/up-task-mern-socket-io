@@ -1,7 +1,7 @@
 'use strict';
 
 import { User } from './../models';
-import { genId } from '../helpers';
+import { emailResetPassword, genId } from '../helpers';
 
 export const confirmUser = async (req, res) => {
   try {
@@ -32,6 +32,7 @@ export const generateRecoveryToken = async (req, res) => {
   await user.save();
 
   // Send email with token/instructions
+  await emailResetPassword({ email, name: user.name, token: user.token });
 
   res
     .status(200)

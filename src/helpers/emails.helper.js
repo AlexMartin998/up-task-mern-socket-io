@@ -10,10 +10,8 @@ import {
   FRONTEND_URL,
 } from './../config';
 
-export const emailRegister = async emailData => {
-  const { name, email, token } = emailData;
-
-  const transport = nodemailer.createTransport({
+const setTransport = () =>
+  nodemailer.createTransport({
     host: EMAIL_HOST,
     port: EMAIL_PORT,
     auth: {
@@ -22,8 +20,13 @@ export const emailRegister = async emailData => {
     },
   });
 
+export const emailRegister = async emailData => {
+  const { name, email, token } = emailData;
+
+  const transport = setTransport();
+
   // Send mail with defined transport object
-  const info = await transport.sendMail({
+  await transport.sendMail({
     from: '"UpTask - Administrador de Proyectos 👻" <hola@uptask.com>',
     to: email,
     subject: 'UpTask - Confirma tu cuenta ✔',
@@ -35,5 +38,28 @@ export const emailRegister = async emailData => {
 
     <p>Si tu no creaste esta cuenta, puedes ignorar este mensaje.</p>
   `,
+  });
+};
+
+export const emailResetPassword = async emailData => {
+  const { name, email, token } = emailData;
+  console.log('email:', { name, email, token });
+
+  const transport = setTransport();
+
+  // Send mail
+  await transport.sendMail({
+    from: '"UpTask - Administrador de Proyectos 👻" <hola@uptask.com>',
+    to: email,
+    subject: 'UpTask - Reestablece tu Password',
+    text: 'Reestablece tu Password',
+    html: `<p>Hola ${name}, has solicitado restablecer tu password.</p>
+
+      <p>Sigue el siguiente enlace para generar tu nuevo password:
+        <a href="${FRONTEND_URL}/forgot-password/${token}">Restablecer Password</a>
+      </p>
+
+      <p>Si tu no solicitaste esto, puedes ignorar este mensaje.</p>
+    `,
   });
 };
