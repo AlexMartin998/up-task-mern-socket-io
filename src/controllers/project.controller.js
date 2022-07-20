@@ -45,6 +45,7 @@ export const getProject = async (req, res) => {
 
   const project = await Project.findById(id)
     .populate('owner', 'email name')
+    .populate('collaborators', 'email name')
     .populate('tasks');
 
   res.status(200).json({
@@ -150,10 +151,14 @@ export const addCollaborator = async (req, res) => {
 };
 
 export const removeCollaborator = async (req, res) => {
-  //
-};
+  const { id } = req.params;
+  const { partnerId } = req.body;
 
-// Pending:
-// export const getTask = async (req, res) => {
-//   //
-// };
+  const project = await Project.findById(id);
+
+  // Delete collaborator
+  project.collaborators.pull(partnerId);
+  await project.save();
+
+  res.status(200).json({ ok: true, msg: 'Collaborator successfully deleted!' });
+};

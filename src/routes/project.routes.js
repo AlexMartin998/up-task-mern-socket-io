@@ -76,8 +76,18 @@ router
       check('id').custom((id, { req }) => idExistInDB(id, 'project', req)),
       validate,
     ],
+
     addCollaborator
   )
-  .delete(removeCollaborator);
+  .put(
+    [
+      check('id', 'Invalid ID!').isMongoId(),
+      validate,
+      check('id').custom((id, { req }) => idExistInDB(id, 'project', req)),
+      validate,
+    ],
+
+    removeCollaborator
+  );
 
 export default router;
