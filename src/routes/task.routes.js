@@ -4,8 +4,18 @@ import { Router } from 'express';
 import { check } from 'express-validator';
 
 import { createTaskRules, protectWithJwt, validate } from '../middlewares';
-import { idExistInDB, isValidPriority } from '../helpers';
-import { createTask, deleteTask, getTask, updateTask } from '../controllers';
+import {
+  idExistInDB,
+  isSameUserOrPartnerTask,
+  isValidPriority,
+} from '../helpers';
+import {
+  createTask,
+  deleteTask,
+  getTask,
+  toggleState,
+  updateTask,
+} from '../controllers';
 
 const router = Router();
 
@@ -54,5 +64,18 @@ router
 
     deleteTask
   );
+
+router.route('/state/:id').patch(
+  [
+    check('id', 'Invalid ID!').isMongoId(),
+    validate,
+    check('id').custom((id, { req }) =>
+      isSameUserOrPartnerTask(id, 'task', req)
+    ),
+    validate,
+  ],
+
+  toggleState
+);
 
 export default router;

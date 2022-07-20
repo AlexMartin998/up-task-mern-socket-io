@@ -66,3 +66,13 @@ export const deleteTask = async (req, res) => {
     res.status(500).json({ ok: false, msg: 'Something went wrong!' });
   }
 };
+
+export const toggleState = async (req, res) => {
+  const { id } = req.params;
+
+  const task = await Task.findById(id);
+  task.state = !task.state;
+
+  await task.save();
+  res.status(200).json(task);
+};
