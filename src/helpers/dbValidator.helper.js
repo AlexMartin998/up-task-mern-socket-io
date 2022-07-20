@@ -29,6 +29,22 @@ const isSameUer = (model, authenticatedUser) => {
     throw new Error('Unauthorized!');
 };
 
+export const isSameUserOrPartner = async (id, collection, req) => {
+  const { authenticatedUser } = req;
+
+  const project = await Project.findById(id);
+  if (!project)
+    throw new Error(`${collection} ID: '${id} doesn't exist in DB!`);
+
+  if (
+    project.owner._id.toString() !== authenticatedUser._id.toString() &&
+    !project.collaborators.some(
+      partner => partner._id.toString() === authenticatedUser._id.toString()
+    )
+  )
+    throw new Error('Unauthorized!');
+};
+
 export const idExistInDB = async (id, collection, req) => {
   let model;
   const { authenticatedUser } = req;

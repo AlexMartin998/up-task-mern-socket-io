@@ -29,7 +29,12 @@ export const getProjects = async (req, res) => {
 
   try {
     const [projects, total] = await Promise.all([
-      Project.find(ownProjects).select('-tasks'),
+      Project.find({
+        $or: [
+          { collaborators: { $in: authenticatedUser._id } },
+          { owner: { $in: authenticatedUser._id } },
+        ],
+      }).select('-tasks'),
       Project.countDocuments(ownProjects),
     ]);
 
@@ -156,7 +161,7 @@ export const removeCollaborator = async (req, res) => {
 
   const project = await Project.findById(id);
 
-  // Delete collaborator
+  // Delete collaborator - pull of Mongoose
   project.collaborators.pull(partnerId);
   await project.save();
 

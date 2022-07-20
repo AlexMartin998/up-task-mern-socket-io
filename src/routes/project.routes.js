@@ -14,7 +14,7 @@ import {
   updateProject,
 } from '../controllers';
 import { check } from 'express-validator';
-import { idExistInDB } from '../helpers';
+import { idExistInDB, isSameUserOrPartner } from '../helpers';
 
 const router = Router();
 
@@ -32,7 +32,9 @@ router
     [
       check('id', 'Invalid ID!').isMongoId(),
       validate,
-      check('id').custom((id, { req }) => idExistInDB(id, 'project', req)),
+      check('id').custom((id, { req }) =>
+        isSameUserOrPartner(id, 'project', req)
+      ),
       validate,
     ],
 
