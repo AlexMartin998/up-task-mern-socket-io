@@ -44,7 +44,7 @@ export const getProject = async (req, res) => {
   const { id } = req.params;
 
   const project = await Project.findById(id)
-    .populate('owner', 'name')
+    .populate('owner', 'email name')
     .populate('tasks');
 
   res.status(200).json({
@@ -109,10 +109,12 @@ export const deleteProject = async (req, res) => {
   }
 };
 
+// TODO: Middleware para validar el email
+
 export const lookForCollaborator = async (req, res) => {
   const { email } = req.body;
 
-  const user = await User.findOne({ email }).select('-confirmed -token');
+  const user = await User.findOne({ email });
   if (!user)
     return res.status(404).json({ ok: false, msg: 'Unregistered email!' });
 
@@ -120,7 +122,31 @@ export const lookForCollaborator = async (req, res) => {
 };
 
 export const addCollaborator = async (req, res) => {
-  //
+  const { id } = req.params;
+  const { email } = req.body;
+
+  const project = await Project.findById(id);
+  const user = await User.findOne({ email });
+  if (!user)
+    return res.status(404).json({ ok: false, msg: 'Unregistered email!' });
+
+  // Owner can't be a collaborator in your project  <- Do it also in Front
+  if (project.owner._id.toString() === user._id.toString())
+    return res.status(401).json({
+      msg: 'The Project Creator cannot be a collaborator!',
+      ok: false,
+    });
+
+  // Not yet a collaborator
+  if (project.collaborators.includes(user._id))
+    return res
+      .status(401)
+      .json({ msg: 'The user already belongs to the project' });
+
+  project.collaborators.push(user._id);
+  await project.save();
+
+  res.status(200).json({ msg: 'Collaborator successfully added!' });
 };
 
 export const removeCollaborator = async (req, res) => {

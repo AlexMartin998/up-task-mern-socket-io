@@ -69,7 +69,15 @@ router.route('/collaborator').post(
 
 router
   .route('/collaborator/:id')
-  .post(addCollaborator)
+  .post(
+    [
+      check('id', 'Invalid ID!').isMongoId(),
+      validate,
+      check('id').custom((id, { req }) => idExistInDB(id, 'project', req)),
+      validate,
+    ],
+    addCollaborator
+  )
   .delete(removeCollaborator);
 
 export default router;
