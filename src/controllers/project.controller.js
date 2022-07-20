@@ -1,12 +1,12 @@
 'use strict';
 
-import { Project, Task } from '../models';
+import { Project, User } from '../models';
 
 export const createProject = async (req, res) => {
-  const { name, description, client } = req.body;
+  const { name, description, client, deliveryDate } = req.body;
   const { authenticatedUser } = req;
 
-  const newProject = new Project({ name, description, client });
+  const newProject = new Project({ name, description, client, deliveryDate });
   newProject.owner = authenticatedUser._id;
 
   try {
@@ -29,7 +29,7 @@ export const getProjects = async (req, res) => {
 
   try {
     const [projects, total] = await Promise.all([
-      Project.find(ownProjects),
+      Project.find(ownProjects).select('-tasks'),
       Project.countDocuments(ownProjects),
     ]);
 
@@ -43,21 +43,13 @@ export const getProjects = async (req, res) => {
 export const getProject = async (req, res) => {
   const { id } = req.params;
 
-  const project = await Project.findById(id).populate('owner', 'name');
-
-  // Get its tasks
-  const itsTasks = { project: project._id };
-  const [tasks, total] = await Promise.all([
-    Task.find(itsTasks),
-    Task.countDocuments(itsTasks),
-  ]);
+  const project = await Project.findById(id)
+    .populate('owner', 'name')
+    .populate('tasks');
 
   res.status(200).json({
     ok: true,
-    project: {
-      project,
-      tasks: { total, tasks },
-    },
+    project,
   });
 };
 
@@ -81,7 +73,7 @@ export const updateProject = async (req, res) => {
   }
 };
 
-/* Other way:
+/* Other way: doesn't allow sending empty data
 export const updateProject = async (req, res) => {
   const { id } = req.params;
   const { name, client, description, deliveryDate } = req.body;
@@ -115,6 +107,16 @@ export const deleteProject = async (req, res) => {
     console.log(error);
     res.status(500).json({ ok: false, msg: 'Something went wrong!' });
   }
+};
+
+export const lookForCollaborator = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email }).select('-confirmed -token');
+  if (!user)
+    return res.status(404).json({ ok: false, msg: 'Unregistered email!' });
+
+  res.status(200).json({ ok: true, user });
 };
 
 export const addCollaborator = async (req, res) => {

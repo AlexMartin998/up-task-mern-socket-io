@@ -1,13 +1,24 @@
 'use strict';
 
-import { Task } from './../models';
+import { Project, Task } from './../models';
 
 export const createTask = async (req, res) => {
-  const { name, description, priority, project } = req.body;
+  const { name, description, priority, project, deliveryDate } = req.body;
 
   try {
-    const newTask = new Task({ name, description, priority, project });
-    newTask.save();
+    const newTask = new Task({
+      name,
+      description,
+      priority,
+      project,
+      deliveryDate,
+    });
+    await newTask.save();
+
+    // Add this task to its project
+    const itsProject = await Project.findById(project);
+    itsProject.tasks.push(newTask);
+    await itsProject.save();
 
     res
       .status(201)

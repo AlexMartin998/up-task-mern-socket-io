@@ -9,7 +9,7 @@ import {
   deleteProject,
   getProject,
   getProjects,
-  getTask,
+  lookForCollaborator,
   removeCollaborator,
   updateProject,
 } from '../controllers';
@@ -59,10 +59,17 @@ router
     deleteProject
   );
 
-router.route('/task/:id').get(getTask);
+// router.route('/task/:id').get(getTask);
 
-router.route('/add-collaborator/:id').post(addCollaborator);
+router.route('/collaborator').post(
+  [check('email', 'Invalid email!').isEmail(), validate],
 
-router.route('/remove-collaborator/:id').post(removeCollaborator);
+  lookForCollaborator
+);
+
+router
+  .route('/collaborator/:id')
+  .post(addCollaborator)
+  .delete(removeCollaborator);
 
 export default router;

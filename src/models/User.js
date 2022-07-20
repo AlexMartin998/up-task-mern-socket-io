@@ -57,6 +57,8 @@ UserSchema.methods.toJSON = function () {
 
   delete user.password;
   delete user._id;
+  delete user.createdAt;
+  delete user.updatedAt;
 
   return user;
 };
