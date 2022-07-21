@@ -14,5 +14,11 @@ export default io => {
 
       socket.to(project).emit('server:addedTask', newTask); // Solo a los del mismo project/room
     });
+
+    socket.on('client:deleteTask', deletedTask => {
+      const project = deletedTask.project;
+
+      socket.to(project).emit('server:deletedTask', deletedTask);
+    });
   });
 };
