@@ -29,6 +29,7 @@ export const getProjects = async (req, res) => {
 
   try {
     const [projects, total] = await Promise.all([
+      // .allSettled()
       Project.find({
         $or: [
           { collaborators: { $in: authenticatedUser._id } },
@@ -51,7 +52,10 @@ export const getProject = async (req, res) => {
   const project = await Project.findById(id)
     .populate('owner', 'email name')
     .populate('collaborators', 'email name')
-    .populate('tasks');
+    .populate({
+      path: 'tasks',
+      populate: { path: 'completedBy', select: 'name' },
+    }); // populate a 1 populate
 
   res.status(200).json({
     ok: true,

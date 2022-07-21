@@ -58,7 +58,11 @@ export const deleteTask = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await Task.findByIdAndDelete(id);
+    const task = await Task.findByIdAndDelete(id);
+
+    const project = await Project.findById(task.project);
+    project.tasks.pull(task._id);
+    await project.save();
 
     res.status(200).json({ ok: true, msg: 'Task successfully deleted!' });
   } catch (error) {
@@ -69,10 +73,19 @@ export const deleteTask = async (req, res) => {
 
 export const toggleState = async (req, res) => {
   const { id } = req.params;
+  const { authenticatedUser } = req;
 
   const task = await Task.findById(id);
-  task.state = !task.state;
+  const savedTask = await Task.findByIdAndUpdate(
+    id,
+    {
+      state: !task.state,
+      completedBy: authenticatedUser._id,
+    },
+    { new: true }
+  )
+    .populate('project')
+    .populate('completedBy');
 
-  await task.save();
-  res.status(200).json(task);
+  res.status(200).json(savedTask);
 };
