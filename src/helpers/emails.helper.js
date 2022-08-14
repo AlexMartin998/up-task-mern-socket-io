@@ -39,6 +39,8 @@ export const emailRegister = async emailData => {
     <p>Si tu no creaste esta cuenta, puedes ignorar este mensaje.</p>
   `,
   });
+
+  console.log(`${FRONTEND_URL}/confirm-account/${token}`);
 };
 
 export const emailResetPassword = async emailData => {

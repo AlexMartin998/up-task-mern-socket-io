@@ -1,8 +1,8 @@
 'use strict';
 
 import authRoutes from './auth.routes';
-import userRoutes from './user.routes';
-import projectRoutes from './project.routes';
-import taskRoutes from './task.routes';
+import usersRoutes from './users.routes';
+import projectsRoutes from './projects.routes';
+import tasksRoutes from './tasks.routes';
 
-export { authRoutes, userRoutes, projectRoutes, taskRoutes };
+export { authRoutes, usersRoutes, projectsRoutes, tasksRoutes };

@@ -1,7 +1,7 @@
 'use strict';
 
 import { connect } from 'mongoose';
-import { MONGODB_URI } from '../config';
+import { MONGODB_URI } from './../config';
 
 (async () => {
   try {
@@ -9,6 +9,5 @@ import { MONGODB_URI } from '../config';
     console.log('DB connectect to:', db.connection.name);
   } catch (error) {
     console.log(error);
-    process.exit(1);
   }
 })();

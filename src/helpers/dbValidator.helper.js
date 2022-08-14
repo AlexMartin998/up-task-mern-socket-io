@@ -1,6 +1,6 @@
 'use strict';
 
-import { Project, Task, User } from '../models';
+import { Project, Task, User } from './../models';
 
 export const isAlreadyRegistered = async (query, collection) => {
   let model;
@@ -24,12 +24,6 @@ export const isAlreadyRegistered = async (query, collection) => {
   }
 };
 
-const isSameUer = (model, authenticatedUser) => {
-  if (model.owner._id.toString() !== authenticatedUser._id.toString())
-    throw new Error('Unauthorized!');
-};
-
-// TODO: Unify in a single function
 export const isSameUserOrPartner = async (id, collection, req) => {
   const { authenticatedUser } = req;
 
@@ -46,21 +40,8 @@ export const isSameUserOrPartner = async (id, collection, req) => {
     throw new Error('Unauthorized!');
 };
 
-export const isSameUserOrPartnerTask = async (id, collection, req) => {
-  const { authenticatedUser } = req;
-
-  const task = await Task.findById(id).populate(
-    'project',
-    'owner collaborators'
-  );
-  if (!task) throw new Error(`${collection} ID: '${id} doesn't exist in DB!`);
-
-  if (
-    task.project.owner._id.toString() !== authenticatedUser._id.toString() &&
-    !task.project.collaborators.some(
-      partner => partner._id.toString() === authenticatedUser._id.toString()
-    )
-  )
+const isSameUer = (model, authenticatedUser) => {
+  if (model.owner._id.toString() !== authenticatedUser._id.toString())
     throw new Error('Unauthorized!');
 };
 
@@ -95,9 +76,32 @@ export const idExistInDB = async (id, collection, req) => {
   }
 };
 
+export const isEmailRegistered = async email => {
+  const user = await User.findOne({ email });
+  if (!user || !user.confirmed) throw new Error('Usuario no encontrado!');
+};
+
 export const isValidPriority = priority => {
   if (!['baja', 'media', 'alta'].includes(priority.toLowerCase()))
     throw new Error(`Invalid priority! - ${priority}`);
 
   return true;
+};
+
+export const isSameUserOrPartnerTask = async (id, collection, req) => {
+  const { authenticatedUser } = req;
+
+  const task = await Task.findById(id).populate(
+    'project',
+    'owner collaborators'
+  );
+  if (!task) throw new Error(`${collection} ID: '${id} doesn't exist in DB!`);
+
+  if (
+    task.project.owner._id.toString() !== authenticatedUser._id.toString() &&
+    !task.project.collaborators.some(
+      partner => partner._id.toString() === authenticatedUser._id.toString()
+    )
+  )
+    throw new Error('Unauthorized!');
 };

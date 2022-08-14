@@ -3,8 +3,8 @@
 import express from 'express';
 
 import './db/db';
-import { setupMiddlewares } from './middlewares/setup.middleware';
-import { authRoutes, projectRoutes, taskRoutes, userRoutes } from './routes';
+import { notFoundMiddleware, setupMiddlewares } from './middlewares';
+import { authRoutes, projectsRoutes, tasksRoutes, usersRoutes } from './routes';
 
 // Initializations:
 const app = express();
@@ -13,9 +13,11 @@ const app = express();
 setupMiddlewares(app);
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/project', projectRoutes);
-app.use('/api/task', taskRoutes);
+app.use('/auth', authRoutes);
+app.use('/users', usersRoutes);
+app.use('/projects', projectsRoutes);
+app.use('/tasks', tasksRoutes);
+
+app.use(notFoundMiddleware);
 
 export default app;

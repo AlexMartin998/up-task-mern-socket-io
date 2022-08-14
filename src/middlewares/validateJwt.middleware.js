@@ -2,8 +2,9 @@
 
 import jwt from 'jsonwebtoken';
 
-import { SECRETORKEY_JWT } from '../config';
 import { User } from '../models';
+
+import { SECRETORKEY_JWT } from './../config';
 
 export const protectWithJwt = async (req, res, next) => {
   const bearerToken = req.header('Authorization');
@@ -14,14 +15,10 @@ export const protectWithJwt = async (req, res, next) => {
 
   try {
     const { id } = jwt.verify(tokenJwt, SECRETORKEY_JWT);
-    const user = await User.findById(id).select(
-      '-password -token -confirmed -createdAt -updatedAt'
-    );
+    const user = await User.findById(id).select('name email confirmed');
 
-    if (!user)
-      return res
-        .status(401)
-        .json({ ok: false, msg: 'Invalid token - user does not exist!' });
+    if (!user || !user.confirmed)
+      return res.status(401).json({ msg: 'Invalid token!' });
 
     req.authenticatedUser = user;
 

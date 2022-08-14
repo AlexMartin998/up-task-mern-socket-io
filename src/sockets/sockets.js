@@ -28,7 +28,7 @@ export default io => {
     });
 
     socket.on('client:toggleTaskState', updatedTaskState => {
-      const project = updatedTaskState.project._id;
+      const project = updatedTaskState?.project._id;
 
       socket.to(project).emit('server:updatedTaskState', updatedTaskState);
     });

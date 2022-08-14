@@ -1,32 +1,14 @@
 'use strict';
 
 import { Router } from 'express';
-import { check } from 'express-validator';
 
-import {
-  checkLoginCredentials,
-  emailPassRules,
-  signUpValidationRules,
-  validate,
-} from '../middlewares';
-import { isAlreadyRegistered } from '../helpers';
 import { signIn, signUp } from '../controllers';
+import { loginRules, signUpRules } from '../middlewares';
 
 const router = Router();
 
-router.route('/signup').post(
-  [
-    signUpValidationRules(),
-    validate,
-    check('email').custom(email => isAlreadyRegistered(email, 'user')),
-    validate,
-  ],
+router.post('/signup', signUpRules(), signUp);
 
-  signUp
-);
-
-router
-  .route('/login')
-  .post(emailPassRules(), validate, checkLoginCredentials, signIn);
+router.post('/login', loginRules(), signIn);
 
 export default router;
