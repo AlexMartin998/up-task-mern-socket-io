@@ -11,15 +11,13 @@ import { FRONTEND_URL } from '../config';
 const allowedDomains = [FRONTEND_URL];
 const corsOptions = {
   origin: function (origin, callbak) {
-    console.log(origin);
     if (allowedDomains.includes(origin)) return callbak(null, true);
     else return callbak(new Error(`${origin} has been blocked by CORS`));
   },
 };
 
 export const setupMiddlewares = app => {
-  // app.use(cors(corsOptions));
-  app.use(cors());
+  app.use(cors(corsOptions));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(compression()).use(helmet());
