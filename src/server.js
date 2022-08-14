@@ -15,6 +15,6 @@ export const httpServer = server.listen(PORT, () => {
 
 const io = new WebsocketServer(httpServer, {
   pingTimeout: 60000,
-  cors: { origin: FRONTEND_URL },
+  // cors: { origin: FRONTEND_URL },
 });
 Sockets(io);
