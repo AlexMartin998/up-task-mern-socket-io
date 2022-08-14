@@ -11,6 +11,7 @@ import { FRONTEND_URL } from '../config';
 const allowedDomains = [FRONTEND_URL];
 const corsOptions = {
   origin: function (origin, callbak) {
+    console.log(origin);
     if (allowedDomains.includes(origin)) return callbak(null, true);
     else return callbak(new Error(`${origin} has been blocked by CORS`));
   },
