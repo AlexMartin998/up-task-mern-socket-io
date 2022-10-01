@@ -2,9 +2,14 @@
 
 import express from 'express';
 
-import './db/db';
-import { notFoundMiddleware, setupMiddlewares } from './middlewares';
-import { authRoutes, projectsRoutes, tasksRoutes, usersRoutes } from './routes';
+import './db/db.js';
+import { notFoundMiddleware, setupMiddlewares } from './middlewares/index.js';
+import {
+  authRoutes,
+  projectsRoutes,
+  tasksRoutes,
+  usersRoutes,
+} from './routes/index.js';
 
 // Initializations:
 const app = express();

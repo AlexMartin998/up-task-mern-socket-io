@@ -1,6 +1,6 @@
 'use strict';
 
-import { Project, User } from '../models';
+import { Project, User } from '../models/index.js';
 
 export const createProject = async (req, res) => {
   const { name, description, client, deliveryDate } = req.body;

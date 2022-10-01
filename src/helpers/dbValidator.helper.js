@@ -1,6 +1,6 @@
 'use strict';
 
-import { Project, Task, User } from './../models';
+import { Project, Task, User } from './../models/index.js';
 
 export const isAlreadyRegistered = async (query, collection) => {
   let model;

@@ -2,8 +2,8 @@
 
 import { Router } from 'express';
 
-import { signIn, signUp } from '../controllers';
-import { loginRules, signUpRules } from '../middlewares';
+import { signIn, signUp } from '../controllers/index.js';
+import { loginRules, signUpRules } from '../middlewares/index.js';
 
 const router = Router();
 

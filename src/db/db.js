@@ -1,7 +1,7 @@
 'use strict';
 
 import { connect } from 'mongoose';
-import { MONGODB_URI } from './../config';
+import { MONGODB_URI } from './../config/index.js';
 
 (async () => {
   try {

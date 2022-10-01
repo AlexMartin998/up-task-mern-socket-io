@@ -8,7 +8,7 @@ import {
   projectIdRules,
   protectWithJwt,
   removePartnerRules,
-} from '../middlewares';
+} from '../middlewares/index.js';
 import {
   addCollaborator,
   createProject,
@@ -17,7 +17,7 @@ import {
   getProjects,
   removeCollaborator,
   updateProject,
-} from '../controllers';
+} from '../controllers/index.js';
 
 const router = Router();
 

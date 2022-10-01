@@ -8,7 +8,7 @@ import {
   EMAIL_PORT,
   EMAIL_USER,
   FRONTEND_URL,
-} from './../config';
+} from './../config/index.js';
 
 const setTransport = () =>
   nodemailer.createTransport({

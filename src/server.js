@@ -4,9 +4,9 @@ console.clear();
 import { createServer } from 'http';
 import { Server as WebsocketServer } from 'socket.io';
 
-import app from './app';
-import Sockets from './sockets/sockets';
-import { FRONTEND_URL, PORT } from './config';
+import app from './app.js';
+import Sockets from './sockets/sockets.js';
+import { FRONTEND_URL, PORT } from './config/index.js';
 
 const server = createServer(app);
 export const httpServer = server.listen(PORT, () => {

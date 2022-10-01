@@ -8,14 +8,14 @@ import {
   taskIdRules,
   toggleStateRules,
   updateTaskRules,
-} from '../middlewares';
+} from '../middlewares/index.js';
 import {
   createTask,
   deleteTask,
   getTask,
   toggleState,
   updateTask,
-} from '../controllers';
+} from '../controllers/index.js';
 
 const router = Router();
 

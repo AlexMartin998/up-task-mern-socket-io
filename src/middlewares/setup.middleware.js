@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
 
-import { FRONTEND_URL } from '../config';
+import { FRONTEND_URL } from '../config/index.js';
 
 const allowedDomains = [FRONTEND_URL];
 const corsOptions = {
@@ -17,7 +17,8 @@ const corsOptions = {
 };
 
 export const setupMiddlewares = app => {
-  app.use(cors(corsOptions));
+  app.use(cors());
+  // app.use(cors(corsOptions));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(compression()).use(helmet());

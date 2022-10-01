@@ -9,8 +9,8 @@ import {
   isSameUserOrPartner,
   isSameUserOrPartnerTask,
   isValidPriority,
-} from '../helpers';
-import { checkLoginCredentials, checkToken } from '.';
+} from '../helpers/index.js';
+import { checkLoginCredentials, checkToken } from './index.js';
 
 export const validate = (req, res, next) => {
   const errors = validationResult(req);

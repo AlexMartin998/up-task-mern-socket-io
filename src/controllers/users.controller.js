@@ -1,7 +1,7 @@
 'use strict';
 
-import { User } from './../models';
-import { emailResetPassword, genId } from '../helpers';
+import { User } from './../models/index.js';
+import { emailResetPassword, genId } from '../helpers/index.js';
 
 export const confirmUser = async (req, res) => {
   const { token } = req.params;

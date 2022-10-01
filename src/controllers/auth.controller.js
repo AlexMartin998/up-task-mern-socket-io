@@ -1,7 +1,7 @@
 'use strict';
 
-import { User } from '../models';
-import { emailRegister, genId, genJWT } from '../helpers';
+import { User } from '../models/index.js';
+import { emailRegister, genId, genJWT } from '../helpers/index.js';
 
 export const signUp = async (req, res) => {
   const { name, email, password } = req.body;

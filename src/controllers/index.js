@@ -1,6 +1,6 @@
 'use strict';
 
-export * from './auth.controller';
-export * from './users.controller';
-export * from './projects.controller';
-export * from './tasks.controller';
+export * from './auth.controller.js';
+export * from './users.controller.js';
+export * from './projects.controller.js';
+export * from './tasks.controller.js';

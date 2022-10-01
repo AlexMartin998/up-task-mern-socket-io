@@ -1,6 +1,6 @@
 'use strict';
 
-export * from './dbValidator.helper';
-export * from './genId.helper';
-export * from './emails.helper';
-export * from './genJwt.helper';
+export * from './dbValidator.helper.js';
+export * from './genId.helper.js';
+export * from './emails.helper.js';
+export * from './genJwt.helper.js';

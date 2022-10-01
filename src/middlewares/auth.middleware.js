@@ -1,6 +1,6 @@
 'use strict';
 
-import { User } from '../models';
+import { User } from '../models/index.js';
 
 export const checkLoginCredentials = async (req, res, next) => {
   const { email, password } = req.body;

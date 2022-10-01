@@ -8,7 +8,7 @@ import {
   genRecoveryTokenRules,
   getUserByEmailRules,
   protectWithJwt,
-} from '../middlewares';
+} from '../middlewares/index.js';
 import {
   confirmUser,
   genNewPassword,
@@ -16,7 +16,7 @@ import {
   getUserByEmail,
   isAuthenticated,
   validateToken,
-} from '../controllers';
+} from '../controllers/index.js';
 
 const router = Router();
 
