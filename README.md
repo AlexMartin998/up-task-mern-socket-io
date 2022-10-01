@@ -26,6 +26,15 @@ Running the app in a development environment with docker on port 3300
 docker compose -f docker-compose-dev.yml up --build
 ```
 
+## View demo
+
+To see the real-time behavior you can log in with:
+
+- User 1: `adrian@test.com` and password `test123`.
+- User 2: `adrian2@test.com` and password `test123`.
+
+[Demo](https://uptask-mern-io-adrianlx.netlify.app/)
+
 ## Testing
 
 ### Jest with supertest
